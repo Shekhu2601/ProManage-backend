@@ -5,6 +5,7 @@ const cors =require("cors")
 const mongoose= require('mongoose')
 dotenv.config()
 const userRouter= require("./routes/user")
+const taskRouter=require("./routes/task")
 
 const bodyParser = require('body-parser');
 app.use(cors())
@@ -17,6 +18,8 @@ app.get('/', (req,res)=>{
 
 
 app.use("/api/user", userRouter)
+app.use("/api/task",taskRouter)
+
 app.listen(process.env.PORT,()=>{
     console.log("server on running port 5000")
     mongoose.connect(process.env.MONGOOSE_URI_STRING,{
