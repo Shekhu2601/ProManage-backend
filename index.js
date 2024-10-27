@@ -6,7 +6,7 @@ const mongoose= require('mongoose')
 dotenv.config()
 const userRouter= require("./routes/user")
 const taskRouter=require("./routes/task")
-
+const boardRouter=require("./routes/board")
 const bodyParser = require('body-parser');
 app.use(cors())
 app.use(bodyParser.json())
@@ -19,6 +19,7 @@ app.get('/', (req,res)=>{
 
 app.use("/api/user", userRouter)
 app.use("/api/task",taskRouter)
+app.use("/api/board",boardRouter)
 
 app.listen(process.env.PORT,()=>{
     console.log("server on running port 5000")

@@ -11,7 +11,11 @@ const User =require("../schema/user.schema")
 router.post(("/register"), async(req ,res)=>{
     const {name, email, password} =req.body;
     const ifuserExist = await User.findOne({email}) //user is exists
-    if(ifuserExist){
+   
+  
+    
+    
+   if(ifuserExist){
         return res.status(400).json({message: "User already exists"})
     }
     
@@ -20,6 +24,8 @@ router.post(("/register"), async(req ,res)=>{
     await user.save()
     res.status(200).json({message:"User craete succesfully "})
 })
+
+
 // Get all users
 router.get(("/") , async(req, res)=>{
     const users = await User.find().select("-password")
@@ -36,7 +42,7 @@ router.get("/:email",async(req, res)=>{
 })
 // login user
 router.post("/login", async(req,res)=>{
-    const {email, password} =req.body;
+    const {name, email, password} =req.body;
     const user = await User.findOne({email}) //user is exists
     if(!user){
         return res.status(400).json({message: "Wrong email "})
@@ -48,7 +54,7 @@ router.post("/login", async(req,res)=>{
     const payload ={id:user._id}
     const token =jsonwebtoken.sign(payload ,process.env.JWT_SECRET)
     
-     res.json({message:"user logged in",email:email,
+     res.json({message:"user logged in",email:email,name:name,
         token
      })
      

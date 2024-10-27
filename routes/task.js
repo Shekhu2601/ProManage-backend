@@ -38,31 +38,23 @@ router.get(("/") , async(req, res)=>{
 
 
 // delete jobs
-router.delete("/:id", authMiddleware, async (req,res)=>{
+router.delete("/:id", async (req,res)=>{
     const id =req.params.id;
-    const task =await Task.findById(id);
-    if(!task){
-        return res.status(400).json({message:"task not found"})
-    }
-    if(task.creator.toString() !==req.user.toString()){
-        return res.status(401).json({message:"You are not authorized to delete this task" })
-    }
     await Task.findByIdAndDelete(id);
+    console.log(id)
     res.status(200).json({message:"task delete successfully"});
 })
 
-router.put("/:id", authMiddleware, async(req, res)=>{
+router.put("/:id",  async(req, res)=>{
    try{
     const id = req.params.id;
-    const {title, priority,assign,checklists,creator} =req.body;
+    const {title, priority,assign,checklists} =req.body;
    
     let task =await Task.findById(id);
     if(!task){
         return res.status(400).json({message:"Task not found"})
     }
-    if(task.creator.toString() !==req.user.toString()){
-        return res.status(401).json({message:"You are not authorized to edit this job" })
-    }
+   
      task = await Task.findByIdAndUpdate(id,{title, priority,assign,checklists} ,{new:true});
     
     res.status(201).json(task)
@@ -73,23 +65,5 @@ router.put("/:id", authMiddleware, async(req, res)=>{
     res.status(400).json({message:"task not updated"})
    }
 })
-// TODO: add skills also
 
-  
- /*router.get("/:id", validateRequest({
-     params: z.object({
-         id: z.string().uuid()
-     }),
- }), authMiddleware, async (req, res) => {
-     const { id } = req.params.id;
-     const job = await Job.findById(id);
-     if (!job) {
-         return res.status(404).json({ message: "Job not found" });
-     }
-     res.status(200).json(job);
-
-    
-     
- }
- );*/
 module.exports =router;
